@@ -226,7 +226,7 @@ button:disabled{filter:none}
 .task-list{flex:1;min-height:0;overflow:hidden}
 .task-list::-webkit-scrollbar{width:0;height:0}
 .task-item{break-inside:avoid}
- .task-item{display:flex;gap:8px;padding:5px 6px;border-bottom:1px solid var(--border-color);align-items:flex-start;font-size:14px;cursor:pointer;border-radius:4px}
+ .task-item{display:flex;gap:8px;padding:5px 6px;border-bottom:1px solid var(--border-color);align-items:center;font-size:14px;cursor:pointer;border-radius:4px}
 .task-item:last-child{border-bottom:none}
 .task-item:hover{background:var(--bg-hover)}
  /* Active (selected) task */
@@ -235,19 +235,33 @@ button:disabled{filter:none}
 .task-item.active .task-text{color:var(--text-primary)}
 .task-item.dimmed .task-num{color:var(--text-dimmed)}
 .task-item.dimmed .task-text{color:var(--text-dimmed)}
+.task-item.dimmed .task-slots{color:var(--text-dimmed)}
  .task-item.dimmed:hover{background:none}
 .task-item.assign-available .task-num{color:var(--text-assign-available)}
 .task-item.assign-available .task-text{color:var(--text-assign-available)}
+.task-item.assign-available .task-slots{color:var(--text-assign-available)}
 .task-item.assign-available:hover{background:var(--bg-hover)}
 .task-item.assign-available:hover .task-num{color:var(--text-primary)}
 .task-item.assign-available:hover .task-text{color:var(--text-primary)}
+.task-item.assign-available:hover .task-slots{color:var(--text-primary)}
 .task-item.assign-current{background:var(--bg-card)}
 .task-item.assign-current .task-num{color:var(--accent-blue)}
 .task-item.assign-current .task-text{color:var(--text-primary)}
+.task-item.assign-current .task-slots{color:var(--text-primary)}
 .task-item.completed .task-num{color:var(--text-muted)}
 .task-num{color:var(--accent-blue);font-weight:600;min-width:22px;font-size:14px}
 .task-item.unassigned .task-num{color:var(--accent-red)}
-.task-text{color:var(--text-secondary);font-weight:400;font-size:14px;line-height:1.3}
+.task-text{color:var(--text-secondary);font-weight:400;font-size:14px;line-height:1.3;flex:1 1 auto;min-width:0}
+.task-slots{margin-left:auto;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;color:var(--text-secondary);font-size:12px;line-height:1;flex:0 0 auto}
+.task-slot-actual{min-width:16px;text-align:right;color:inherit}
+.task-slot-sep{color:var(--text-muted)}
+.task-slot-planned{width:38px;height:22px;border:1px solid var(--control-border);border-radius:6px;background:var(--control-bg);color:var(--text-secondary);font:inherit;font-size:12px;text-align:center;outline:none;padding:0 4px}
+.task-slot-planned:focus{border-color:var(--accent-blue);color:var(--text-primary)}
+.task-slot-planned.is-underfilled{color:var(--accent-red);border-color:rgba(229,62,62,.75)}
+.task-item.dimmed .task-slot-planned.is-underfilled{color:var(--accent-red)}
+.task-slot-planned::-webkit-outer-spin-button,
+.task-slot-planned::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.task-slot-planned[type=number]{-moz-appearance:textfield}
 /* dept labels removed */
 
  .special-btns{display:flex;align-items:center;justify-content:flex-start;gap:var(--special-btn-gap, var(--control-gap));padding:0 6px 4px;flex-shrink:0}
@@ -282,9 +296,15 @@ button:disabled{filter:none}
  .special-btn.dimmed{opacity:.3}
 .special-btn .btn-dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
 .add-task-row{display:flex;flex-direction:column;gap:6px;padding:6px 6px 28px;flex:0 0 132px;margin-top:14px;justify-content:flex-end}
+.add-task-fields{display:flex;gap:6px;width:100%}
  .add-task-input{width:100%;background:var(--control-bg);border:1px solid var(--control-border);border-radius:var(--control-radius);padding:7px 10px;color:var(--text-primary);font-size:14px;font-family:var(--font-family);font-weight:400;outline:none;height:var(--control-height);box-sizing:border-box}
+.add-task-name{flex:1 1 auto;min-width:0}
+.add-task-slots{flex:0 0 58px;text-align:center;padding-left:6px;padding-right:6px}
 .add-task-input::placeholder{color:var(--text-muted)}
 .add-task-input:focus{border-color:var(--accent-blue)}
+.add-task-slots::-webkit-outer-spin-button,
+.add-task-slots::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.add-task-slots[type=number]{-moz-appearance:textfield}
 .add-task-btns{display:none;gap:var(--control-gap);justify-content:flex-end}
 .add-task-btns.visible{display:flex}
 .add-task-btn{font-size:14px;font-weight:400;padding:7px 10px;border-radius:var(--control-radius);border:none;cursor:pointer;font-family:var(--font-family);height:var(--control-height);box-sizing:border-box;display:inline-flex;align-items:center}
@@ -294,7 +314,7 @@ button:disabled{filter:none}
 .block{position:relative}
 .block.assign-target{box-shadow:inset 0 0 0 2px var(--text-primary)}
 
-.task-del{width:20px;height:20px;border-radius:4px;border:none;background:var(--accent-red);color:#fff;font-size:14px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-family);padding:0;margin-left:auto}
+.task-del{width:20px;height:20px;border-radius:4px;border:none;background:var(--accent-red);color:#fff;font-size:14px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-family);padding:0;margin-left:4px}
 .task-item.active .task-del{display:flex}
 .emp-mgmt{display:flex;align-items:center;gap:4px;margin-left:auto}
 .emp-mgmt-btn{width:24px;height:24px;border-radius:4px;border:1px solid var(--control-border);background:var(--control-bg);color:var(--text-secondary);font-size:16px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-family);padding:0;transition:filter .15s,color .15s}
@@ -344,10 +364,13 @@ button:disabled{filter:none}
     <div class="top-row">
       <div class="widget summary-widget">
         <div class="widget__header"><span class="widget__title">Задачи</span></div>
-        <div class="widget__body">
+          <div class="widget__body">
           <div class="task-list" id="taskList"></div>
           <div class="add-task-row">
-            <input class="add-task-input" id="addTaskInput" placeholder="Новая работа...">
+            <div class="add-task-fields">
+              <input class="add-task-input add-task-name" id="addTaskInput" placeholder="Новая работа...">
+              <input class="add-task-input add-task-slots" id="addTaskSlotsInput" type="number" min="0" step="1" placeholder="слоты">
+            </div>
             <div class="add-task-btns" id="addTaskBtns">
               <button class="add-task-btn cancel" id="addTaskCancel">Отмена</button>
               <button class="add-task-btn ok" id="addTaskOk">Ок</button>
@@ -476,11 +499,36 @@ function autoSaveToLocalStorage(){
   }catch(e){void e;}
 }
 
+function normalizeTaskSlotValue(value){
+  var raw=String(value==null?'':value).trim();
+  if(!raw)return 0;
+  var n=parseFloat(raw.replace(',', '.'));
+  if(isNaN(n)||n<0)return 0;
+  // UI stores required slot count. If a 0.05-based load value is pasted, convert it.
+  if(n>0&&n<1)return Math.round(n/0.05);
+  return Math.round(n);
+}
+
+function formatTaskSlotValue(value){
+  var n=normalizeTaskSlotValue(value);
+  return n?String(n):'';
+}
+
+function getTaskRequiredSlots(t){
+  return normalizeTaskSlotValue(t && (typeof t.requiredSlots!=='undefined'?t.requiredSlots:t.plannedSlots));
+}
+
+function getTaskActualSlots(taskId){
+  return (taskBlockCounts && taskBlockCounts[taskId])?taskBlockCounts[taskId]:0;
+}
+
 function normalizeTasks(){
   tasks=(Array.isArray(tasks)?tasks:[]).map(function(t){
     if(!t)return t;
     if(typeof t.completed==='undefined')t.completed=false;
     t.completed=!!t.completed;
+    t.requiredSlots=getTaskRequiredSlots(t);
+    if(typeof t.plannedSlots!=='undefined')delete t.plannedSlots;
     return t;
   });
 }
@@ -629,9 +677,9 @@ function restoreFromSnapshot(snap){
 
   normalizeTeamTasksLength();
   rebuildDaysRow();
+  recalc();
   renderTaskList();
   updateTaskColumns();
-  recalc();
   renderBar();
   rebuildGrid();
   updateSaveButtonLabel();
@@ -991,17 +1039,43 @@ function renderTaskList(){
     var item=document.createElement('div');item.className='task-item';if(t.completed)item.classList.add('completed');if(!isTaskAssigned(t.id))item.classList.add('unassigned');item.setAttribute('data-task-id',t.id);item.title=t.completed?'Выполнено':'Не выполнено';
     var numSpan=document.createElement('span');numSpan.className='task-num';numSpan.textContent=i+1;
     var textSpan=document.createElement('span');textSpan.className='task-text';textSpan.textContent=t.text;
+    var actualSlots=getTaskActualSlots(t.id);
+    var requiredSlots=getTaskRequiredSlots(t);
+    var slotsWrap=document.createElement('span');slotsWrap.className='task-slots';slotsWrap.title='Занято / требуется слотов';
+    var actualSpan=document.createElement('span');actualSpan.className='task-slot-actual';actualSpan.textContent=String(actualSlots);
+    var sepSpan=document.createElement('span');sepSpan.className='task-slot-sep';sepSpan.textContent='/';
+    var reqInput=document.createElement('input');reqInput.className='task-slot-planned';reqInput.type='number';reqInput.min='0';reqInput.step='1';reqInput.value=formatTaskSlotValue(requiredSlots);reqInput.setAttribute('aria-label','Требуется слотов');
+    if(requiredSlots>0&&actualSlots<requiredSlots)reqInput.classList.add('is-underfilled');
+    reqInput.addEventListener('click',function(ev){ev.stopPropagation()});
+    reqInput.addEventListener('dblclick',function(ev){ev.stopPropagation()});
+    reqInput.addEventListener('keydown',function(ev){
+      if(ev.key==='Enter'){ev.preventDefault();reqInput.blur();}
+      if(ev.key==='Escape'){ev.preventDefault();reqInput.value=formatTaskSlotValue(t.requiredSlots);reqInput.blur();}
+    });
+    reqInput.addEventListener('change',function(ev){
+      ev.stopPropagation();
+      var next=normalizeTaskSlotValue(reqInput.value);
+      if(next===getTaskRequiredSlots(t)){reqInput.value=formatTaskSlotValue(next);return;}
+      pushHistory();
+      t.requiredSlots=next;
+      reqInput.value=formatTaskSlotValue(next);
+      reqInput.classList.toggle('is-underfilled',next>0&&actualSlots<next);
+      autoSaveToLocalStorage();
+    });
+    slotsWrap.appendChild(actualSpan);slotsWrap.appendChild(sepSpan);slotsWrap.appendChild(reqInput);
     var delBtn=document.createElement('button');delBtn.className='task-del';delBtn.textContent='×';
     delBtn.addEventListener('click',function(ev){ev.stopPropagation();deleteTask(t.id)});
-    item.appendChild(numSpan);item.appendChild(textSpan);item.appendChild(delBtn);
+    item.appendChild(numSpan);item.appendChild(textSpan);item.appendChild(slotsWrap);item.appendChild(delBtn);
     // Click is handled via delegated listener on #taskList (below)
     item.addEventListener('dblclick',function(e){
+      if(e.target&&e.target.closest&&e.target.closest('.task-slot-planned'))return;
       e.preventDefault();
       var newText=prompt('Название работы:',t.text);
       if(newText!==null&&newText.trim()){
         pushHistory();
         t.text=newText.trim();
         textSpan.textContent=t.text;
+        autoSaveToLocalStorage();
       }
     });el.appendChild(item);
   });
@@ -1019,7 +1093,7 @@ try{
       if(ev && ev.defaultPrevented)return;
       var t=ev && ev.target;
       if(!t)return;
-      if(t.closest && t.closest('.task-del'))return;
+      if(t.closest && (t.closest('.task-del')||t.closest('.task-slot-planned')))return;
       var item=t.closest ? t.closest('.task-item') : null;
       if(!item)return;
       var tid=parseInt(item.getAttribute('data-task-id'));
@@ -1044,12 +1118,13 @@ document.getElementById('btnFree').addEventListener('click',function(){
   toggleHighlight(SPECIAL_FREE_ID);
 });
 
-var addInput=document.getElementById('addTaskInput'),addBtns=document.getElementById('addTaskBtns');
+var addInput=document.getElementById('addTaskInput'),addSlotsInput=document.getElementById('addTaskSlotsInput'),addBtns=document.getElementById('addTaskBtns');
 function cancelAddTaskInput(blurIt){
   if(!addInput || !addBtns)return;
   addInput.value='';
+  if(addSlotsInput)addSlotsInput.value='';
   addBtns.classList.remove('visible');
-  if(blurIt)addInput.blur();
+  if(blurIt){addInput.blur();if(addSlotsInput)addSlotsInput.blur();}
 }
 function isAddTaskPending(){
   return !!(addInput && addBtns && addBtns.classList.contains('visible') && addInput.value.trim().length>0);
@@ -1077,15 +1152,16 @@ try{
 }catch(e){void e;}
 function addNewTask(){
   var txt=addInput.value.trim();if(!txt)return;
+  var requiredSlots=normalizeTaskSlotValue(addSlotsInput?addSlotsInput.value:0);
   pushHistory();
   var newId=tasks.length?Math.max.apply(null,tasks.map(function(t){return t.id}))+1:1;
-  tasks.push({id:newId,text:txt,completed:false});addInput.value='';addBtns.classList.remove('visible');
+  tasks.push({id:newId,text:txt,completed:false,requiredSlots:requiredSlots});addInput.value='';if(addSlotsInput)addSlotsInput.value='';addBtns.classList.remove('visible');
   // Persist task list changes on refresh.
   autoSaveToLocalStorage();
   recalc();renderBar();renderTaskList();updateTaskColumns();
 }
 document.getElementById('addTaskOk').addEventListener('click',addNewTask);
-addInput.addEventListener('keydown',function(e){
+function handleAddTaskKeydown(e){
   if(e.key==='Enter'){
     e.preventDefault();
     e.stopPropagation();
@@ -1096,7 +1172,9 @@ addInput.addEventListener('keydown',function(e){
     e.stopPropagation();
     cancelAddTaskInput(true);
   }
-});
+}
+addInput.addEventListener('keydown',handleAddTaskKeydown);
+if(addSlotsInput)addSlotsInput.addEventListener('keydown',handleAddTaskKeydown);
 
 function clearAllHighlights(){
   removeHighlight();
@@ -1814,7 +1892,7 @@ function applySprintPeriod(periodText){
   isWeekend=meta.map(function(x){return x.dow>=5?1:0});
   normalizeTeamTasksLength();
   rebuildDaysRow();
-  recalc();renderBar();rebuildGrid();
+  recalc();renderBar();renderTaskList();updateTaskColumns();rebuildGrid();
   return true;
 }
 
@@ -2599,7 +2677,7 @@ function restorePaintSnapshot(){
     });
   });
   paintSnapshot=null;
-  recalc();renderBar();rebuildGrid();
+  recalc();renderBar();renderTaskList();updateTaskColumns();rebuildGrid();
 }
 function commitPaint(){
   paintSnapshot=null;
@@ -2718,7 +2796,7 @@ function addEmployee(){
   var newTasks=sprintDays.map(function(_,idx){return isWeekend[idx]?null:[0,0]});
   team.push({name:name.trim(),tasks:newTasks});
   departments=[{name:'',members:team}];
-  recalc();renderBar();rebuildGrid();updateTaskColumns();
+  recalc();renderBar();renderTaskList();updateTaskColumns();rebuildGrid();
   // Persist changes so refresh keeps the roster.
   autoSaveToLocalStorage();
   saveRosterToLocalStorage();
@@ -2731,7 +2809,7 @@ function deleteEmployee(empIdx){
   departments=[{name:'',members:team}];
   if(activeEmpIdx===empIdx)activeEmpIdx=null;
   else if(activeEmpIdx!==null&&activeEmpIdx>empIdx)activeEmpIdx--;
-  recalc();renderBar();rebuildGrid();updateTaskColumns();
+  recalc();renderBar();renderTaskList();updateTaskColumns();rebuildGrid();
   autoSaveToLocalStorage();
   updateEmpButton();
   saveRosterToLocalStorage();
