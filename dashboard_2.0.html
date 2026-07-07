@@ -514,7 +514,7 @@ function parseTaskSlotLoad(value){
 
 function formatTaskSlotValue(value){
   var slots=normalizeTaskSlotValue(value);
-  if(!slots)return '0,0';
+  if(!slots)return '0,00';
   var load=slots*0.05;
   return load.toFixed(2).replace(/0+$/,'').replace(/\.$/,'').replace('.', ',');
 }
@@ -1055,18 +1055,18 @@ function renderTaskList(){
     var slotsWrap=document.createElement('span');slotsWrap.className='task-slots';slotsWrap.title='Занято / требуется';
     var actualSpan=document.createElement('span');actualSpan.className='task-slot-actual';actualSpan.textContent=formatTaskSlotLoad(actualSlots);
     var sepSpan=document.createElement('span');sepSpan.className='task-slot-sep';sepSpan.textContent='/';
-    var reqSpan=document.createElement('span');reqSpan.className='task-slot-planned';reqSpan.tabIndex=0;reqSpan.textContent=formatTaskSlotValue(requiredSlots)||'0,0';reqSpan.setAttribute('aria-label','Требуется');
+    var reqSpan=document.createElement('span');reqSpan.className='task-slot-planned';reqSpan.tabIndex=0;reqSpan.textContent=formatTaskSlotValue(requiredSlots);reqSpan.setAttribute('aria-label','Требуется');
     if(requiredSlots>0&&actualSlots<requiredSlots)reqSpan.classList.add('is-underfilled');
     function editRequiredSlots(ev){
       if(ev)ev.stopPropagation();
       var current=getTaskRequiredSlots(t);
-      var nextValue=prompt('Требуется:',formatTaskSlotValue(current)||'0,0');
+      var nextValue=prompt('Требуется:',formatTaskSlotValue(current));
       if(nextValue===null)return;
       var next=parseTaskSlotLoad(nextValue);
-      if(next===current){reqSpan.textContent=formatTaskSlotValue(next)||'0,0';return;}
+      if(next===current){reqSpan.textContent=formatTaskSlotValue(next);return;}
       pushHistory();
       t.requiredSlots=next;
-      reqSpan.textContent=formatTaskSlotValue(next)||'0,0';
+      reqSpan.textContent=formatTaskSlotValue(next);
       reqSpan.classList.toggle('is-underfilled',next>0&&actualSlots<next);
       autoSaveToLocalStorage();
     }
