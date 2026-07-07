@@ -255,13 +255,10 @@ button:disabled{filter:none}
 .task-slots{margin-left:auto;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;color:var(--text-secondary);font-size:12px;line-height:1;flex:0 0 auto}
 .task-slot-actual{min-width:28px;text-align:right;color:inherit}
 .task-slot-sep{color:var(--text-muted)}
-.task-slot-planned{width:50px;height:22px;border:1px solid var(--control-border);border-radius:6px;background:var(--control-bg);color:var(--text-secondary);font:inherit;font-size:12px;text-align:center;outline:none;padding:0 4px}
-.task-slot-planned:focus{border-color:var(--accent-blue);color:var(--text-primary)}
-.task-slot-planned.is-underfilled{color:var(--accent-red);border-color:rgba(229,62,62,.75)}
+.task-slot-planned{min-width:32px;color:var(--text-secondary);font:inherit;font-size:12px;text-align:left;outline:none;cursor:pointer;display:inline-block}
+.task-slot-planned:focus{color:var(--text-primary)}
+.task-slot-planned.is-underfilled{color:var(--accent-red)}
 .task-item.dimmed .task-slot-planned.is-underfilled{color:var(--accent-red)}
-.task-slot-planned::-webkit-outer-spin-button,
-.task-slot-planned::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.task-slot-planned[type=number]{-moz-appearance:textfield}
 /* dept labels removed */
 
  .special-btns{display:flex;align-items:center;justify-content:flex-start;gap:var(--special-btn-gap, var(--control-gap));padding:0 6px 4px;flex-shrink:0}
@@ -517,15 +514,15 @@ function parseTaskSlotLoad(value){
 
 function formatTaskSlotValue(value){
   var slots=normalizeTaskSlotValue(value);
-  if(!slots)return '';
+  if(!slots)return '0,0';
   var load=slots*0.05;
-  return load.toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
+  return load.toFixed(2).replace(/0+$/,'').replace(/\.$/,'').replace('.', ',');
 }
 
 function formatTaskSlotLoad(slots){
   slots=Math.max(0,Math.round(Number(slots)||0));
   if(!slots)return '0';
-  return (slots*0.05).toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
+  return (slots*0.05).toFixed(2).replace(/0+$/,'').replace(/\.$/,'').replace('.', ',');
 }
 
 function getTaskRequiredSlots(t){
@@ -1058,25 +1055,25 @@ function renderTaskList(){
     var slotsWrap=document.createElement('span');slotsWrap.className='task-slots';slotsWrap.title='Занято / требуется';
     var actualSpan=document.createElement('span');actualSpan.className='task-slot-actual';actualSpan.textContent=formatTaskSlotLoad(actualSlots);
     var sepSpan=document.createElement('span');sepSpan.className='task-slot-sep';sepSpan.textContent='/';
-    var reqInput=document.createElement('input');reqInput.className='task-slot-planned';reqInput.type='number';reqInput.min='0';reqInput.step='0.05';reqInput.value=formatTaskSlotValue(requiredSlots);reqInput.setAttribute('aria-label','Требуется');
-    if(requiredSlots>0&&actualSlots<requiredSlots)reqInput.classList.add('is-underfilled');
-    reqInput.addEventListener('click',function(ev){ev.stopPropagation()});
-    reqInput.addEventListener('dblclick',function(ev){ev.stopPropagation()});
-    reqInput.addEventListener('keydown',function(ev){
-      if(ev.key==='Enter'){ev.preventDefault();reqInput.blur();}
-      if(ev.key==='Escape'){ev.preventDefault();reqInput.value=formatTaskSlotValue(t.requiredSlots);reqInput.blur();}
-    });
-    reqInput.addEventListener('change',function(ev){
-      ev.stopPropagation();
-      var next=parseTaskSlotLoad(reqInput.value);
-      if(next===getTaskRequiredSlots(t)){reqInput.value=formatTaskSlotValue(next);return;}
+    var reqSpan=document.createElement('span');reqSpan.className='task-slot-planned';reqSpan.tabIndex=0;reqSpan.textContent=formatTaskSlotValue(requiredSlots)||'0,0';reqSpan.setAttribute('aria-label','Требуется');
+    if(requiredSlots>0&&actualSlots<requiredSlots)reqSpan.classList.add('is-underfilled');
+    function editRequiredSlots(ev){
+      if(ev)ev.stopPropagation();
+      var current=getTaskRequiredSlots(t);
+      var nextValue=prompt('Требуется:',formatTaskSlotValue(current)||'0,0');
+      if(nextValue===null)return;
+      var next=parseTaskSlotLoad(nextValue);
+      if(next===current){reqSpan.textContent=formatTaskSlotValue(next)||'0,0';return;}
       pushHistory();
       t.requiredSlots=next;
-      reqInput.value=formatTaskSlotValue(next);
-      reqInput.classList.toggle('is-underfilled',next>0&&actualSlots<next);
+      reqSpan.textContent=formatTaskSlotValue(next)||'0,0';
+      reqSpan.classList.toggle('is-underfilled',next>0&&actualSlots<next);
       autoSaveToLocalStorage();
-    });
-    slotsWrap.appendChild(actualSpan);slotsWrap.appendChild(sepSpan);slotsWrap.appendChild(reqInput);
+    }
+    reqSpan.addEventListener('click',editRequiredSlots);
+    reqSpan.addEventListener('dblclick',function(ev){ev.stopPropagation()});
+    reqSpan.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();editRequiredSlots(ev);}});
+    slotsWrap.appendChild(actualSpan);slotsWrap.appendChild(sepSpan);slotsWrap.appendChild(reqSpan);
     var delBtn=document.createElement('button');delBtn.className='task-del';delBtn.textContent='×';
     delBtn.addEventListener('click',function(ev){ev.stopPropagation();deleteTask(t.id)});
     item.appendChild(numSpan);item.appendChild(textSpan);item.appendChild(slotsWrap);item.appendChild(delBtn);
